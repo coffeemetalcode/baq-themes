@@ -1,0 +1,23 @@
+{
+  "name": "baq-themes",
+  "version": "1.0.0",
+  "description": "Themes and assets for Bon Air Quilt Company's Shopify store",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dbstocker/baq-themes.git"
+  },
+  "author": "coffee | metal | code",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dbstocker/baq-themes/issues"
+  },
+  "homepage": "https://github.com/dbstocker/baq-themes#readme",
+  "devDependencies": {
+    "@shopify/prettier-plugin-liquid": "^1.0.2",
+    "prettier": "^2.8.1"
+  }
+}
