@@ -170,10 +170,7 @@
                 {% endfor %}
               </div>
             {% endunless %}
-
-            {%- comment -%}
-            <p style="color: red">product template</p>
-            {%- endcomment -%}
+            
             <select name="id" data-productid="{{ product.id }}" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
               {% for variant in product.variants %}
                 <option value="{{ variant.id }}"
@@ -183,59 +180,81 @@
                 </option>
               {% endfor %}
             </select>
-        
-            {% if product.tags contains "Sell By Quarter" %}
-              <p style="color: red">if "Sell By Quarter"</p>
-              <div class="product-form__controls-group" id="form-control-qty" data-product-tags="{{ product.tags }}">
-                <div class="product-form__item">
-                  <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }} in Yards</label>
-                  <input type="number" id="Quantity-{{ section.id }}"
-                    name="quantity" value="1.00" min="0.50" step="0.25" pattern="[0-9]*"
-                    class="product-form__input product-form__input--quantity" data-quantity-input
-                  >
-                </div>
-              </div>
-              
-            {% else %}
-            <p style="color: red">if !"Sell By Quarter"</p>
+
+            {% if section.settings.show_quantity_selector %}            
               <div class="product-form__controls-group">
                 <div class="product-form__item">
-                  <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+                  
+                  {% if product.tags contains "Sell By Quarter" %}
+                    <p style="color: red">sell by quarter</p>
+                    {% comment %} TODO: a translation for this would be nice {% endcomment %}
+                    <label for="Quantity-{{ section.id }}">Quantity in Yards</label>
+                    <input type="number" id="custom-Quantity-{{ section.id }}"
+                      name="quantity" value="1" min="1" pattern="[0-9]*"
+                      class="product-form__input product-form__input--quantity decimal-input"
+                    >
+                    {% else %}
+                    <p style="color: red">sell by whole</p>
+                    <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+                    <input type="number" id="custom-Quantity-{{ section.id }}"
+                      name="quantity" value="1" min="1" pattern="[0-9]*"
+                      class="product-form__input product-form__input--quantity whole-input"
+                    >
+
+                  {% endif %}
                   <input type="number" id="Quantity-{{ section.id }}"
-                    name="quantity" value="1" min="1" pattern="[0-9]*"
+                    name="quantity" value="1" min="1" pattern="[0-9]*" style="display: none"
                     class="product-form__input product-form__input--quantity" data-quantity-input
                   >
                 </div>
               </div>
             {% endif %}
-        
-        	{% comment %} <script>
-              let quantBox = document.getElementById('Quantity-yardage-product-template');
-              let dataEl = document.getElementById('form-control-qty');
-              let qty = quantBox.value;
-              let tags = dataEl.getAttribute('data-product-tags');
-              function alertMe() {
-                qty = quantBox.value;
-                let calculatedQty = (qty * 4).toFixed(2);
-                console.log('The value in the box:', qty.toString());
-                console.log('The inventory value:', calculatedQty.toString());
-                console.log('tags', tags);
+
+            <script>
+              console.log('script tag');
+              let quantityInput = document.getElementById('custom-Quantity-product-template');
+              let cartQuantity = document.getElementById('Quantity-product-template');
+              let yardage = isYardage();
+              let multiplier = getMultiplier();
+              let eventList = [
+                'click',
+                'blur',
+                'keyup',
+              ];
+
+              function prepareInput(element, events, handler) {
+                events.forEach((event) => {
+                  console.log(event);
+                  element.addEventListener(event, handler, false);
+                });
               }
               
-              quantBox.onblur = alertMe;
-        	</script> {% endcomment %}
+              function getMultiplier() {
+                return yardage ? 4 : 1;
+              }
 
-            {% if section.settings.show_quantity_selector %}
-              <div class="product-form__controls-group">
-                <div class="product-form__item">
-                  <label for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
-                  <input type="number" id="Quantity-{{ section.id }}"
-                    name="quantity" value="1" min="1" pattern="[0-9]*"
-                    class="product-form__input product-form__input--quantity" data-quantity-input
-                  >
-                </div>
-              </div>
-            {% endif %}
+              function isYardage() {
+                return quantityInput.classList.contains("decimal-input");
+              }
+
+              function calculateQuantity() {
+                let userVal = quantityInput.value;
+                console.log('user value', userVal);
+                cartQuantity.value = userVal * multiplier;
+                console.log('cart value', cartQuantity.value);
+              }
+
+              prepareInput(quantityInput, eventList, calculateQuantity);
+
+              if (yardage) {
+                console.log('decimal input');
+                let displayVal = parseFloat(quantityInput.value);
+                quantityInput.value = displayVal.toFixed(2);
+                quantityInput.min = "0.5";
+                quantityInput.step = "0.25";
+              }
+                
+            </script>
 
             <div class="product-form__error-message-wrapper product-form__error-message-wrapper--hidden{% if section.settings.enable_payment_button %} product-form__error-message-wrapper--has-payment-button{% endif %}"
               data-error-message-wrapper

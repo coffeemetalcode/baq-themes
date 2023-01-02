@@ -4189,6 +4189,7 @@ theme.Product = (function() {
             // request/cart popup is loading and handle loading state
             this._handleButtonLoadingState(true);
             var $data = $(this.selectors.productForm, this.$container);
+            console.log('_initAddToCart $quantityInput.val', this.$quantityInput.val());
             this._addItemToCart($data);
             return;
           }
@@ -4197,6 +4198,7 @@ theme.Product = (function() {
     },
 
     _addItemToCart: function(data) {
+      console.log('theme.js _addItemToCart data', data);
       var params = {
         url: '/cart/add.js',
         data: $(data).serialize(),
@@ -4206,7 +4208,8 @@ theme.Product = (function() {
       $.post(params)
         .done(
           function(item) {
-            // console.log('_addItemToCart item', item);
+            console.log('theme.js _addItemToCart params', params);
+            console.log('theme.js _addItemToCard item', item);
             this._hideErrorMessage();
             this._setupCartPopup(item);
           }.bind(this)
