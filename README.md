@@ -18,26 +18,39 @@ Software in this repo uses the [Shopify Liquid](https://shopify.dev/api/liquid) 
 ### Prerequisites
 
 - [Node v16.19.0](https://nodejs.org/en/download/releases/)
+- [Node Version Manager](https://github.com/nvm-sh/nvm)
 - [Ruby](https://www.ruby-lang.org/en/documentation/installation/)
-- [Shopify CLI v2.xx](https://rubygems.org/gems/shopify-cli)
-
-@TODO: Upgrade Shopify CLI to [v3.xx](https://shopify.dev/themes/tools/cli/install) (requires Ruby 3)
+- [Bundler](https://bundler.io/)
+- [Shopify CLI v3.xx](https://shopify.dev/themes/tools/cli)
 
 ## Commands
 
-### Login
+### Version 3
+
+#### Sync to Store, Login, Build, and Serve
+
+*from the theme's root directory*
+
+```bash
+shopify theme dev --store=<store-name>.myshopify.com
+```
+
+#### [Full List of V3 Commands](https://shopify.dev/themes/tools/cli/commands)
+### Version 2
+
+#### Login
 
 ```bash
 shopify login --store=<store-name>.myshopify.com
 ```
 
-### Fetch Theme
+#### Fetch Theme
 
 ```bash
 shopify theme pull --theme=<theme-name-or-id>
 ```
 
-### Build and Serve Theme
+#### Build and Serve Theme
 
 *from the theme's root directory*
 
@@ -45,7 +58,7 @@ shopify theme pull --theme=<theme-name-or-id>
 shopify theme serve
 ```
 
-### [Full List of Commands](https://shopify.dev/themes/tools/cli/cli-2/commands)
+#### [Full List of V2 Commands](https://shopify.dev/themes/tools/cli/cli-2/commands)
 
 ## Full Documentation
 

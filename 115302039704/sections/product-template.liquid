@@ -224,7 +224,7 @@
 
               function prepareInput(element, events, handler) {
                 events.forEach((event) => {
-                  console.log(event);
+                  console.log('prepare input event', event);
                   element.addEventListener(event, handler, false);
                 });
               }
